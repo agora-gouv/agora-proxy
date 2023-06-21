@@ -1,0 +1,24 @@
+# Define Rate Limits
+limit_req_zone $binary_remote_addr zone=signupRateLimit:10m rate=1r/m;
+limit_req_zone $binary_remote_addr zone=loginRateLimit:10m rate=1r/s;
+
+server {
+    server_name localhost;
+    listen <%= ENV['PORT'] %>;
+    charset utf-8;
+
+    # Setup reverse proxy
+    location / {
+        proxy_pass <%= ENV["API_BACKEND"] %>;
+    }
+
+    # Setup Rate Limits
+    location /signup {
+        limit_req zone=signupRateLimit;
+        proxy_pass <%= ENV["API_BACKEND"] + "/signup" %>;
+    }
+    location /login {
+        limit_req zone=loginRateLimit;
+        proxy_pass <%= ENV["API_BACKEND"] + "/login" %>;
+    }
+}

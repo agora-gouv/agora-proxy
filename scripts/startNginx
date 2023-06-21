@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+basedir="$( cd -P "$(dirname $(dirname "$0" ))" && pwd )"
+
+echo "# Run Nginx"
+$basedir/bin/run
